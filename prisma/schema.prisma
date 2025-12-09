@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Patient {
+  id        String    @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  dob       DateTime?
+  address   String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  tickets   Ticket[]
+
+  @@map("patients")
+}
+
+model Ticket {
+  id          String    @id @default(cuid())
+  number      String    @unique
+  status      String    @default("WAITING") // WAITING, IN_TREATMENT, COMPLETED
+  type        String // Service type: General Consultation, Laboratory, etc.
+  priority    Int       @default(0) // 0 = Normal, 1 = Urgent, 2 = Critical
+  notes       String?
+  roomId      Int? // Which room the patient is in (1, 2, 3, 4)
+  patient     Patient   @relation(fields: [patientId], references: [id])
+  patientId   String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime? // When treatment was completed
+
+  @@map("tickets")
+}
+
+// Optional: If you want to track doctors/staff
+model Staff {
+  id        String   @id @default(cuid())
+  name      String
+  role      String // Doctor, Nurse, Receptionist
+  email     String   @unique
+  phone     String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@map("staff")
+}
