@@ -3,6 +3,7 @@ import Layout from './components/Layout';
 import Reception from './pages/Reception';
 import DoctorView from './pages/DoctorView';
 import KioskDisplay from './pages/KioskDisplay';
+import PatientHistory from './pages/PatientHistory';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Route index element={<Reception />} />
           <Route path="doctor" element={<DoctorView />} />
           <Route path="kiosk" element={<KioskDisplay />} />
+          <Route path="patients" element={<PatientHistory />} />
         </Route>
       </Routes>
     </Router>
